@@ -13,7 +13,7 @@
 
 using namespace std;
 ////////////////////////////////////////////////////////////////////////////////
-void tokenize(std::string const& str, const char delim,	std::vector<std::string>& out);
+void split(string const& str, vector<string>& out);
 
 std::shared_ptr<QueryBase> QueryBase::factory(const string& s)
 {
@@ -24,7 +24,7 @@ std::shared_ptr<QueryBase> QueryBase::factory(const string& s)
 	regex _word(R"(\S+)"); 
 	std::vector<std::string> results;
 	//split string for words
-	tokenize(s, ' ', results);
+	split(s,results);
 
 	if (regex_match(s, _and)) {
 		return std::shared_ptr<AndQuery>(new AndQuery(results.at(0), results.at(2)));
@@ -126,14 +126,13 @@ QueryResult NQuery::eval(const TextQuery &text) const{
 /////////////////////////////////////////////////////////
 
 /* split string to tokens with delimiter */
-void tokenize(std::string const& str, const char delim,
-	std::vector<std::string>& out)
+void split(string const& str, vector<string>& out)
 {
 	// construct a stream from the string
-	std::stringstream ss(str);
+	istringstream stream(str);
+	string word;
 
-	std::string s;
-	while (std::getline(ss, s, delim)) {
-		out.push_back(s);
+	while (stream >> word) {
+		out.push_back(word);
 	}
 }
